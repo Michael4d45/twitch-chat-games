@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# VS Code files
+.vscode
+
+# This has my twitch OAUTH, I'd rather not give that out.
+build
