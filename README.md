@@ -1,6 +1,17 @@
 # Twitch Chat Games
 
+# Run
 Make sure to add the .env with the information needed to run the twitch chatbot [docs](https://dev.twitch.tv/docs/irc).
+- node_moules
+    - `npm install`
+- build
+    - Development `npm run dev` 
+    - Minified `npm run prod` 
+    - Continuous `npm run watch`
+- Server
+    - `npm run serve`
+- Twitch
+    - `npm run twitch`
 
 # Intro
 This project provides a node server with a twitch chatbot to play games with your friends. 
