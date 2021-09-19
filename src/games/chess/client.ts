@@ -63,7 +63,8 @@ const black_win_pos = new Pos(10, 5);
 function draw_text() {
     if (World.won) {
         canvas.draw_text("Winner: " + World.won, winner_pos, "red")
-        canvas.draw_text(World.won_timer.toString(), timer_pos, "red")
+        const time = Math.round(World.won_timer / 1000).toString();
+        canvas.draw_text("restarting in " + time, timer_pos, "black");
     }
     canvas.draw_text("White: " + World.White_wins, white_win_pos, "black");
     canvas.draw_text("black: " + World.Black_wins, black_win_pos, "black");

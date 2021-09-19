@@ -112,13 +112,25 @@ function move_piece(player: Player, from: Space, to: Space) {
 }
 
 function check_win() {
-    let winner: Team | null = null;
-    if (winner === null) return;
-    console.log("won " + winner)
-    won = winner;
+    let black_win = true;
+    let white_win = true;
+    for (let i = 0; i < 64; i++) {
+        const piece = board[i];
+        if (piece !== null && piece.name == 'K') {
+            if (piece.team === 'white') black_win = false;
+            if (piece.team === 'black') white_win = false;
+        }
+    }
+    if (!white_win && !black_win) return;
     won_timer = won_time_limit;
-    if (won === "white") White_wins++;
-    if (won === "black") Black_wins++;
+    if(black_win) {
+        Black_wins++;
+        won = "black";
+    }
+    if(white_win) {
+        White_wins++;
+        won = "white";
+    }
 }
 
 function animate(timestamp: number) {
