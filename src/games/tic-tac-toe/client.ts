@@ -78,7 +78,7 @@ function draw_X(pos: Pos) {
 
 function draw_O(pos: Pos) {
     pos = pos.copy().translate(-2, -2);
-    canvas.draw_circle_at(pos, 'black', true, 4);
+    canvas.draw_circle(pos, 'black', true, 4);
 }
 
 const win_pos = new Pos(-1, -3.5);
@@ -92,7 +92,7 @@ function draw_text() {
             canvas.draw_text("Winner : O", win_pos, "blue");
             break;
         case Team.X:
-            canvas.draw_text("Winner : O", win_pos, "red");
+            canvas.draw_text("Winner : X", win_pos, "red");
             break;
     }
     if (World.won !== null) {

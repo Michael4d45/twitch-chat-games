@@ -1,10 +1,12 @@
 import { Game } from "./types";
 import * as Shooty from "../games/shooty";
 import * as TicTacToe from "../games/tic-tac-toe";
+import * as Chess from "../games/chess";
 
 let games: Map<string, Game> = new Map([
     [Shooty.name, <Game>Shooty],
-    [TicTacToe.name, <Game>TicTacToe]
+    [TicTacToe.name, TicTacToe],
+    [Chess.name, Chess],
 ]);
 
 function get_world(name: string) {

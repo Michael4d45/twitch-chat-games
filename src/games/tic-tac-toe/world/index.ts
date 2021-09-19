@@ -105,23 +105,20 @@ function check_win() {
         return !(piece === board[line[1]] && piece === board[line[2]]);
     });
     if (not_won || winner === null) return;
-    console.log("won " + winner)
     won = winner;
     won_timer = won_time_limit;
-    if(won === Team.X) X_wins++;
-    if(won === Team.O) O_wins++;
+    if (won === Team.X) X_wins++;
+    if (won === Team.O) O_wins++;
 }
 
 function animate(timestamp: number) {
-    won_timer -= (1000 / 30);
-    if (won !== null && (won_timer <= 0)) {
-        reset()
+    if (won !== null) {
+        won_timer -= (1000 / 30);
+        if (won_timer <= 0) reset()
     }
-    if(won) console.log(won_timer)
 }
 
 function reset() {
-    console.log("resetting");
     won = null;
     board = [...empty_board];
 }
@@ -131,7 +128,6 @@ function toJSON(): WorldData {
     players.forEach(player => {
         player_data.push(player.toJSON());
     })
-    console.log(board)
     return {
         players: player_data,
         board: board,

@@ -52,48 +52,38 @@ function clear_draws() {
     draw_callbacks = [];
 }
 
-function draw_square_at(pos: Pos, color: string, stroke = false) {
+function draw_square(pos: Pos, color: string, stroke = false, size = 1) {
+    size *= scale;
     pos = convert_pos(pos)
-    const old_color = ctx.fillStyle;
     ctx.fillStyle = color;
 
-    if (stroke) ctx.strokeRect(pos.x, pos.y, scale, scale);
-    else ctx.fillRect(pos.x, pos.y, scale, scale);
-
-    ctx.fillStyle = old_color;
+    if (stroke) ctx.strokeRect(pos.x, pos.y, size, size);
+    else ctx.fillRect(pos.x, pos.y, size, size);
 }
 
-function draw_circle_at(pos: Pos, color: string, stroke = false, size = 1) {
+function draw_circle(pos: Pos, color: string, stroke = false, size = 1) {
     pos = convert_pos(pos);
     size *= scale;
     size /= 2;
     pos.translate(size, size);
-    const old_color = ctx.fillStyle;
     ctx.fillStyle = color;
 
     ctx.beginPath();
     ctx.arc(pos.x, pos.y, size / 2, 0, 2 * Math.PI);
     if (stroke) ctx.stroke();
     else ctx.fill();
-
-    ctx.fillStyle = old_color;
 }
 
 function draw_line(pos1: Pos, pos2: Pos, color: string, thickness: number = 1) {
     pos1 = convert_pos(pos1);
     pos2 = convert_pos(pos2);
-    const old_thickness = ctx.lineWidth;
     ctx.lineWidth = thickness;
-    const old_color = ctx.strokeStyle;
     ctx.strokeStyle = color;
 
     ctx.beginPath();
     ctx.moveTo(pos1.x, pos1.y);
     ctx.lineTo(pos2.x, pos2.y);
     ctx.stroke();
-
-    ctx.lineWidth = old_thickness;
-    ctx.strokeStyle = old_color;
 }
 
 function set_scale(new_scale: number) {
@@ -104,21 +94,18 @@ ctx.font = "30px Arial";
 
 function draw_text(text: string, pos: Pos, color: string, size: number = 0.3) {
     pos = convert_pos(pos);
-    const old_color = ctx.strokeStyle;
-    ctx.strokeStyle = color;
     size *= scale;
     ctx.font = size.toString() + "px Arial";
+    ctx.fillStyle = color;
 
     ctx.fillText(text, pos.x, pos.y);
-
-    ctx.strokeStyle = old_color;
 }
 
 export {
     draw,
     draw_hook,
-    draw_square_at,
-    draw_circle_at,
+    draw_square,
+    draw_circle,
     draw_line,
     clear_draws,
     set_scale,
