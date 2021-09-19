@@ -11,9 +11,7 @@ function start(control: Control, twitch: Twitch) {
 
     if (!added_callbacks) {
         control.add_callback(Command.Join, async (channel: string, username: string, client: tmi.Client) => {
-            console.log("callback", Command.Join, channel, username);
-            let message = await client.say(channel, `${username} joined!`);
-            console.log(message);
+            client.say(channel, `${username} joined!`);
         });
         added_callbacks = true;
     }

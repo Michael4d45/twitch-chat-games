@@ -58,19 +58,16 @@ function do_command(command_data: CommandData) {
 }
 
 function user_moved(id: string, from: SpaceName, to: SpaceName) {
-    console.log("user_moved", id, from, to)
     if (from === undefined || to === undefined) return;
     const player = players.get(id);
     if (player) move_piece(player, get_space(from), get_space(to));
 }
 
 function user_joined(id: string, team: Team) {
-    console.log("user_joined", id, team)
     add_player(id, new Player(id, team));
 }
 
 function user_left(id: string) {
-    console.log("user_left", id)
     remove_player(id);
 }
 
@@ -95,11 +92,9 @@ function move(result: MoveResult) {
 
 function move_piece(player: Player, from: Space, to: Space) {
     if (won !== null) return;
-    console.log(space_to_index(from))
     const from_piece = board[space_to_index(from)];
     if (from_piece === null) return;
     if (from_piece.team !== player.team) return;
-    console.log("Move_Piece", from_piece)
 
     const move_result: AttackResult = Attack.attack(from_piece, from, to, board);
     if (move_result === null) return;
@@ -141,7 +136,6 @@ function animate(timestamp: number) {
 }
 
 function reset() {
-    console.log("resetting");
     won = null;
     reset_board();
 }
@@ -151,7 +145,7 @@ function toJSON(): WorldData {
     players.forEach(player => {
         player_data.push(player.toJSON());
     })
-    console.log(board)
+    
     return {
         players: player_data,
         board: board,
