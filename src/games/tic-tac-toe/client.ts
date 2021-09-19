@@ -92,7 +92,7 @@ function draw_text() {
             canvas.draw_text("Winner : O", win_pos, "blue");
             break;
         case Team.X:
-            canvas.draw_text("Winner : O", win_pos, "red");
+            canvas.draw_text("Winner : X", win_pos, "red");
             break;
     }
     if (World.won !== null) {
