@@ -95,6 +95,7 @@ function move(result: MoveResult) {
 
 function move_piece(player: Player, from: Space, to: Space) {
     if (won !== null) return;
+    console.log(space_to_index(from))
     const from_piece = board[space_to_index(from)];
     if (from_piece === null) return;
     if (from_piece.team !== player.team) return;

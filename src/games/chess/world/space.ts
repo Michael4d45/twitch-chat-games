@@ -15,8 +15,8 @@ function space_to_index(space: Space) {
 }
 
 function to_index(rank: number, file: number) {
-    if(rank >= 8 || file >= 8) return null;
-    return (7 - rank) * 8 + (file)
+    if(rank < 0 || file < 0 || rank >= 8 || file >= 8) return null;
+    return (7 - rank) * 8 + (file);
 }
 
 function from_rank(rank: rank) {

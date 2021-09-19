@@ -11,8 +11,8 @@ function attack(from_space: space.Space, to_space: space.Space, board: Board) {
         from_space: from_space,
         to_space: to_space,
     };
-    const rank_diff = space.from_rank(from_space.rank) - space.from_rank(to_space.rank)
-    const file_diff = space.from_file(from_space.file) - space.from_file(to_space.file)
+    const rank_diff = space.from_rank(to_space.rank) - space.from_rank(from_space.rank);
+    const file_diff = space.from_file(to_space.file) - space.from_file(from_space.file);
 
     if (Math.abs(rank_diff) > 1 || Math.abs(file_diff) > 1) return null;
 

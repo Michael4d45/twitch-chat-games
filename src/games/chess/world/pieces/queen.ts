@@ -35,8 +35,8 @@ function attack(from_space: space.Space, to_space: space.Space, board: Board) {
         from_space: from_space,
         to_space: to_space,
     };
-    const rank_diff = space.from_rank(from_space.rank) - space.from_rank(to_space.rank)
-    const file_diff = space.from_file(from_space.file) - space.from_file(to_space.file)
+    const rank_diff = space.from_rank(to_space.rank) - space.from_rank(from_space.rank);
+    const file_diff = space.from_file(to_space.file) - space.from_file(from_space.file);
 
     if ((Math.abs(rank_diff) !== Math.abs(file_diff)) && (rank_diff !== 0 && file_diff !== 0))
         return null;
@@ -44,7 +44,9 @@ function attack(from_space: space.Space, to_space: space.Space, board: Board) {
     const s: space.Space | null = get_line_from(from_space, rank_diff, file_diff, board)
     if (s == null)
         return move_response;
-    if (s.file >= to_space.file && s.rank >= to_space.rank)
+    const s_rank_diff = space.from_rank(to_space.rank) - space.from_rank(from_space.rank);
+    const s_file_diff = space.from_file(to_space.file) - space.from_file(from_space.file);
+    if (Math.abs(s_rank_diff) <= Math.abs(rank_diff) && Math.abs(s_file_diff) <= Math.abs(file_diff))
         return move_response;
 
     // there's some piece in the way

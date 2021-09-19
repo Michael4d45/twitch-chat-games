@@ -53,7 +53,6 @@ function attack(from_space: space.Space, to_space: space.Space, board: Board) {
             console.log("|| Pawn", 8)
 
             const en_passant_piece = board[space.space_to_index(en_passant_space)];
-            console.log(en_passant_space, en_passant_piece, en_passant_piece.team === from_piece.team);
             if (en_passant_piece === null ||
                 en_passant_piece.team === from_piece.team ||
                 en_passant_piece.name !== "P" ||
