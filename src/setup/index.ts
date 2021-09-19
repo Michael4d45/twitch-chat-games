@@ -1,7 +1,7 @@
 import { Game } from "./types";
 import * as Shooty from "../games/shooty";
 import * as TicTacToe from "../games/tic-tac-toe";
-import * as Chess from "../games/tic-tac-toe";
+import * as Chess from "../games/chess";
 
 let games: Map<string, Game> = new Map([
     [Shooty.name, <Game>Shooty],

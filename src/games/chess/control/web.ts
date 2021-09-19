@@ -1,5 +1,4 @@
-import { Command, Space, Team } from "../types";
-import { commands, set_commands } from "./Commands";
+import { commands, set_commands, spaces } from "./Commands";
 import { CommandHandler, Control, Web } from "../../../game_base/control/types"
 
 let command_handler: CommandHandler;
@@ -16,13 +15,13 @@ function start(control: Control, web: Web) {
 const IDs = 15_000;
 let playerTimeout: NodeJS.Timeout;
 
-function randomEnum<T>(anEnum: T): T[keyof T] {
-    const enumValues = Object.keys(anEnum)
-        .map(n => Number.parseInt(n))
-        .filter(n => !Number.isNaN(n)) as unknown as T[keyof T][]
-    const randomIndex = Math.floor(Math.random() * enumValues.length)
-    const randomEnumValue = enumValues[randomIndex]
-    return randomEnumValue;
+function randomTeam() {
+    if(Math.random() < 0.5) return "black"
+    else return "white"
+}
+
+function randomSpace() {
+    return spaces[Math.floor(Math.random() * spaces.length)];
 }
 
 function randomId() {
@@ -35,7 +34,7 @@ function random() {
     running = !running;
     if (running) {
         for (let i = 0; i < IDs; i++)
-            command_handler(i.toString(), Command.Join, [randomEnum(Team)])
+            command_handler(i.toString(), "join", [randomTeam()])
         move_player()
     } else {
         clearTimeout(playerTimeout);
@@ -45,14 +44,14 @@ function random() {
 function move_player() {
     if (!running) return;
     for (let i = 0; i < 200; i++)
-        command_handler(randomId(), Command.Put, [randomEnum(Space).toString()])
+        command_handler(randomId(), "move", [randomSpace(), randomSpace()])
     playerTimeout = setTimeout(move_player, Math.random() * 4000);
 };
 
 function clear() {
     running = false;
     for (let i = 0; i < IDs; i++)
-        command_handler(i.toString(), Command.Kill);
+        command_handler(i.toString(), "leave");
 }
 
 export {

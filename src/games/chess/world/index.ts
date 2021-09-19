@@ -1,70 +1,76 @@
 import { CommandData } from "../../../game_base/server/types";
-import { Command, Space, Team, Piece, team_to_piece, piece_to_team, space_to_index } from "../types";
+import * as Attack from "./pieces/attack"
+import { Command } from "../types";
 import Player, { PlayerData } from "./Player";
+import { Board, empty_board, Team, Piece, MoveResult, AttackResult } from "./types";
+import { get_space, Space, SpaceName, space_to_index } from "./space";
 
 interface WorldData {
     players: Array<PlayerData>
     board: Board
     won: Team | null
     won_timer: number
-    X_wins: number
-    O_wins: number
+    Black_wins: number
+    White_wins: number
 }
 
-type Board = [
-    Piece, Piece, Piece,
-    Piece, Piece, Piece,
-    Piece, Piece, Piece,
-];
-
 let players: Map<string, Player> = new Map();
-const empty_board: Board = [
-    Piece.empty, Piece.empty, Piece.empty,
-    Piece.empty, Piece.empty, Piece.empty,
-    Piece.empty, Piece.empty, Piece.empty,
-]
-let board: Board = [...empty_board];
+
+let board: Board;
+function reset_board() {
+    board = empty_board();
+}
+reset_board();
+
 let won: Team | null = null;
 let won_timer = 0;
 const won_time_limit = 10 * 1000;
 
-let X_wins = 0;
-let O_wins = 0;
+let White_wins = 0;
+let Black_wins = 0;
 
-function time() {
-    return (new Date()).valueOf();
+type JoinData = {
+    team: Team
+}
+
+type MoveData = {
+    from: SpaceName,
+    to: SpaceName
 }
 
 function do_command(command_data: CommandData) {
     const id = command_data.id;
     const data = command_data.data;
-    const command = command_data.command;
+    const command: Command = <Command>command_data.command;
     switch (command) {
-        case Command.Join:
-            const join_data = data;
+        case "join":
+            const join_data = <JoinData>data;
             user_joined(id, join_data.team);
             break;
-        case Command.Put:
-            const move_data = data;
-            user_put(id, move_data.space);
+        case "leave":
+            user_left(id);
             break;
-        case Command.Kill:
-            user_killed(id);
+        case "move":
+            const move_data = <MoveData>data;
+            user_moved(id, move_data.from, move_data.to);
             break;
     }
 }
 
-function user_put(id: string, space: Space) {
+function user_moved(id: string, from: SpaceName, to: SpaceName) {
+    console.log("user_moved", id, from, to)
+    if (from === undefined || to === undefined) return;
     const player = players.get(id);
-    if (player)
-        put_token(player, space);
+    if (player) move_piece(player, get_space(from), get_space(to));
 }
 
 function user_joined(id: string, team: Team) {
+    console.log("user_joined", id, team)
     add_player(id, new Player(id, team));
 }
 
-function user_killed(id: string) {
+function user_left(id: string) {
+    console.log("user_left", id)
     remove_player(id);
 }
 
@@ -76,54 +82,55 @@ function remove_player(id: string) {
     players.delete(id);
 }
 
-function put_token(player: Player, space: Space) {
+function move(result: MoveResult) {
+    const from_index = space_to_index(result.from_space);
+    if (result.to_space) {
+        const to_index = space_to_index(result.to_space);
+        board[to_index] = board[from_index];
+    }
+    const piece = board[from_index];
+    if (piece !== null) piece.data.moves += 1
+    board[from_index] = null;
+}
+
+function move_piece(player: Player, from: Space, to: Space) {
     if (won !== null) return;
-    const piece = <Piece>team_to_piece.get(player.team);
-    const index = <number>space_to_index.get(space);
-    if (board[index] !== Piece.empty) return;
-    board[index] = piece;
+    const from_piece = board[space_to_index(from)];
+    if (from_piece === null) return;
+    if (from_piece.team !== player.team) return;
+    console.log("Move_Piece", from_piece)
+
+    const move_result: AttackResult = Attack.attack(from_piece, from, to, board);
+    if (move_result === null) return;
+    if (Array.isArray(move_result))
+        move_result.forEach(move);
+    else
+        move(move_result)
+
     check_win();
 }
 
-const winning_spaces = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-];
-
 function check_win() {
     let winner: Team | null = null;
-    const not_won = winning_spaces.every(line => {
-        const piece = board[line[0]];
-        if (piece === Piece.empty) return true;
-        winner = <Team>piece_to_team.get(piece);
-        return !(piece === board[line[1]] && piece === board[line[2]]);
-    });
-    if (not_won || winner === null) return;
+    if (winner === null) return;
     console.log("won " + winner)
     won = winner;
     won_timer = won_time_limit;
-    if(won === Team.X) X_wins++;
-    if(won === Team.O) O_wins++;
+    if (won === "white") White_wins++;
+    if (won === "black") Black_wins++;
 }
 
 function animate(timestamp: number) {
-    won_timer -= (1000 / 30);
-    if (won !== null && (won_timer <= 0)) {
-        reset()
+    if (won !== null) {
+        won_timer -= (1000 / 30);
+        if (won_timer <= 0) reset()
     }
-    if(won) console.log(won_timer)
 }
 
 function reset() {
     console.log("resetting");
     won = null;
-    board = [...empty_board];
+    reset_board();
 }
 
 function toJSON(): WorldData {
@@ -137,8 +144,8 @@ function toJSON(): WorldData {
         board: board,
         won: won,
         won_timer: won_timer,
-        X_wins: X_wins,
-        O_wins: O_wins
+        White_wins: White_wins,
+        Black_wins: Black_wins
     }
 }
 
@@ -151,8 +158,8 @@ function fromJSON(data: WorldData) {
     board = data.board
     won = data.won
     won_timer = data.won_timer
-    X_wins = data.X_wins
-    O_wins = data.O_wins
+    White_wins = data.White_wins
+    Black_wins = data.Black_wins
 }
 
 export {
@@ -165,6 +172,6 @@ export {
     do_command,
     won,
     won_timer,
-    O_wins,
-    X_wins,
+    White_wins,
+    Black_wins,
 }

@@ -19,9 +19,9 @@ function draw_players() {
 
 function draw_player(player: Player) {
     const color = player.color;
-    canvas.draw_square_at(player.pos, color);
+    canvas.draw_square(player.pos, color);
     if (player.shot) {
-        canvas.draw_circle_at(player.shot.pos, color);
+        canvas.draw_circle(player.shot.pos, color);
     }
 }
 

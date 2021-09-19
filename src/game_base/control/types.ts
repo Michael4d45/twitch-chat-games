@@ -1,7 +1,8 @@
 import tmi from "tmi.js"
 
 type CommandHandler = (username: string, command_name: string, command_arguments?: Array<string>, callback_args?: Array<any>) => void;
-type AddCallback = (command: string, callback: (channel: string, username: string, client: tmi.Client) => void) => void;
+type Callback = (channel: string, username: string, client: tmi.Client) => void;
+type AddCallback = (command: string, callback: Callback) => void;
 type SetCommand = (command: string, callback: HandleCommandData) => void;
 type SwapGame = (game: string) => void;
 
@@ -45,6 +46,7 @@ export {
     SetCommand,
     CommandHandler,
     AddCallback,
+    Callback,
     Twitch,
     Web,
     Control,

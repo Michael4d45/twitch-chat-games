@@ -6,7 +6,6 @@ const socket: Socket = io("http://localhost:3000");
 
 socket.emit("identify", Room.Control);
 
-
 type Swap = (game: string) => void;
 let swap: Swap;
 
@@ -15,7 +14,7 @@ function set_swap(new_swap: Swap) {
 }
 
 socket.on("swap", (game: string) => {
-    if (!game) throw("No swap set");
+    if (!game) throw ("No swap set");
     console.log("swapping to " + game);
     swap(game);
 });
@@ -42,20 +41,22 @@ function set_command(command_name: string, command_data: HandleCommandData) {
 function add_callback(command_name: string, callback: Function) {
     console.log("adding callback")
     const command_data = commands.get(command_name);
-    if (!command_data) return console.log("nothing happend");
+    if (!command_data) return console.log("nothing happend", command_name, commands);
     command_data.callbacks.push(callback);
-    commands.set(command_name, command_data);
+    console.log(command_data)
 }
 
 const command_handler: CommandHandler = (username: string, command_name: string, command_arguments: Array<string | number> = [], callback_args: Array<any> = []) => {
-    console.log(username, command_name);
+    console.log(username, command_name, 1);
     const command_ws_data: CommandData = {
         id: username,
         command: ""
     }
 
     const command_data = commands.get(command_name);
+    console.log(username, command_name, command_data, commands, 2);
     if (!command_data) return;
+    console.log(username, command_name, 3);
 
     command_ws_data.command = command_data.command;
     if (command_data.args.length > 0) {
@@ -82,7 +83,7 @@ const command_handler: CommandHandler = (username: string, command_name: string,
     if (command_ws_data.command !== "")
         command(command_ws_data);
 
-    console.log(command_data.callbacks.length)
+    console.log(username, command_name, 3);
     command_data.callbacks.forEach(callback => callback(...callback_args))
 }
 

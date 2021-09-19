@@ -52,21 +52,24 @@ function add_controls(commands: Array<HandleCommandData>) {
             });
         } else {
             let args: Array<Array<string>> = [];
+            let start = 0;
+            let end = 0;
             for (let i = 0; i < command_data.args.length; i++) {
                 const in_array = command_data.args[i].in;
                 if (in_array) {
-                    const len = args.length;
+                    end = args.length;
                     in_array.forEach(el => {
-                        if (len == 0)
+                        if (end == 0)
                             args.push([el]);
                         else {
-                            for (let j = 0; j < len; j++) {
-                                const cur_arg = args[j];
+                            for (let j = start; j < end; j++) {
+                                const cur_arg = [...args[j]];
                                 cur_arg.push(el);
                                 args.push(cur_arg);
                             }
                         }
                     });
+                    start = end;
                 }
             }
             args.forEach(command_args => {
