@@ -2,11 +2,13 @@ import { Game } from "./types";
 import * as Shooty from "../games/shooty";
 import * as TicTacToe from "../games/tic-tac-toe";
 import * as Chess from "../games/chess";
+import * as FishBowl from "../games/fish-bowl";
 
 let games: Map<string, Game> = new Map([
     [Shooty.name, <Game>Shooty],
     [TicTacToe.name, TicTacToe],
     [Chess.name, Chess],
+    [FishBowl.name, FishBowl],
 ]);
 
 function get_world(name: string) {
