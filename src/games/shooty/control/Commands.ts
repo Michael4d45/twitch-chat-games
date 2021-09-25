@@ -1,6 +1,5 @@
-
 import { Command } from "../types";
-import { Direction } from "../../../game_base/game/Pos";
+import { Direction } from "../../../game_base/util";
 import { HandleCommandData, SetCommand } from "../../../game_base/control/types";
 
 interface HandleShootyCommandData extends HandleCommandData {

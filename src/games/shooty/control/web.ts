@@ -1,7 +1,7 @@
 import { Command } from "../types";
 import { commands, set_commands } from "./Commands";
 import { CommandHandler, Control, Web } from "../../../game_base/control/types";
-import { Direction } from "../../../game_base/game/Pos";
+import { Direction } from "../../../game_base/util";
 
 let command_handler: CommandHandler;
 

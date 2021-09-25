@@ -4,6 +4,8 @@ const app = express();
 import http from 'http';
 const server = http.createServer(app);
 import { Server, Socket } from "socket.io";
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+import { NEXT_FRAME } from '../util';
 const io = new Server(server);
 
 import { Room, World, CommandData } from './types';
@@ -20,6 +22,8 @@ let world: World;
 let cur_game: string;
 let running = false;
 let animate_timeout: NodeJS.Timeout | null = null;
+let start_time = 0;
+let next_frame = 0;
 type Swap = (game: string) => void;
 let swap: Swap;
 
@@ -34,6 +38,8 @@ function set_swap(new_swap: Swap) {
 function start() {
     running = true;
     last_time = (new Date()).valueOf();
+    start_time = last_time;
+    next_frame = start_time;
     animate();
 }
 
@@ -50,7 +56,8 @@ function animate() {
         last_time = now;
         update_world()
     }
-    animate_timeout = setTimeout(animate, 1000 / 30);
+    next_frame += NEXT_FRAME;
+    animate_timeout = setTimeout(animate, next_frame - now);
 }
 
 const update_time = 20_000;
@@ -87,6 +94,10 @@ function init_command_socket(socket: Socket) {
 function update_world() {
     if (!running) return;
     log("updating world", 2)
+    send_sync_update(io);
+}
+
+function send_sync_update(socket: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>) {
     io.to(Room.Canvas).emit("world", world.toJSON());
 }
 

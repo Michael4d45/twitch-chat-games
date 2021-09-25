@@ -1,8 +1,6 @@
 import tmi from "tmi.js";
 import { CommandHandler, Control, SwapGame } from "./types"
 
-require('dotenv').config();
-
 const COMMAND_CHAR = "!";
 const COMMAND_SEPARATOR = "-";
 

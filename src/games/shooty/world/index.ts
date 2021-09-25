@@ -1,7 +1,7 @@
 import { CommandData } from "../../../game_base/server/types";
 import { Command } from "../types";
 import Player, { PlayerData } from "./Player";
-import { Direction } from "../../../game_base/game/Pos"
+import { Direction } from "../../../game_base/util"
 
 interface WorldData {
     players: Array<PlayerData>

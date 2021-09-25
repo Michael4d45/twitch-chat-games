@@ -1,4 +1,4 @@
-import Pos from "../game/Pos";
+import Pos from "../util/Pos";
 
 const canvas = <HTMLCanvasElement>document.getElementById("c");
 const ctx = <CanvasRenderingContext2D>canvas.getContext("2d");

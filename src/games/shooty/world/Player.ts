@@ -1,29 +1,8 @@
-import { Direction } from "../../../game_base/game/Pos"
+import { Direction, hash, random_color } from "../../../game_base/util"
 import Shot, { ShotData } from "./Shot";
-import Pos, { PosData } from "../../../game_base/game/Pos";
+import Pos, { PosData } from "../../../game_base/util/Pos";
 
 const ZERO = new Pos(0, 0)
-
-function hash(s: string) {
-    var hash = 0, i, chr;
-    if (s.length === 0) return hash;
-    for (i = 0; i < s.length; i++) {
-        chr = s.charCodeAt(i);
-        hash = ((hash << 5) - hash) + chr;
-        hash |= 0; // Convert to 32bit integer
-    }
-    return hash;
-};
-
-function randomColor(id: string) {
-    let h = hash(id);
-    const R = Math.abs(h % 255);
-    h = hash(h.toString());
-    const G = Math.abs(h % 255);
-    h = hash(h.toString());
-    const B = Math.abs(h % 255);
-    return `rgb(${R}, ${G}, ${B})`;
-}
 
 export interface PlayerData {
     pos: PosData
@@ -44,7 +23,7 @@ export default class Player {
 
     constructor(id: string) {
         this.id = id;
-        this.color = randomColor(id);
+        this.color = random_color(id);
     }
 
     move(direction: Direction) {

@@ -1,4 +1,4 @@
-import Pos from "../game/Pos";
+import Pos from "../util/Pos";
 
 interface Canvas {
     draw_text: (text: string, pos: Pos, color: string, size?: number) => void;

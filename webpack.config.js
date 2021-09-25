@@ -1,5 +1,6 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const Dotenv = require('dotenv-webpack');
 
 const module_config = {
     rules: [
@@ -35,6 +36,7 @@ const client_config = {
         filename: 'server/client/app.js',
         path: path.resolve(__dirname, 'build'),
     },
+    plugins: [new Dotenv()],
 };
 
 const control_config = {
@@ -45,6 +47,7 @@ const control_config = {
         filename: 'server/client/control.js',
         path: path.resolve(__dirname, 'build'),
     },
+    plugins: [new Dotenv()],
 };
 
 const twitch_config = {
@@ -57,6 +60,7 @@ const twitch_config = {
         filename: 'twitch/twitch.js',
         path: path.resolve(__dirname, 'build'),
     },
+    plugins: [new Dotenv()],
 }
 
 module.exports = [

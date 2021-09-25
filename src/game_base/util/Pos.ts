@@ -1,9 +1,4 @@
-enum Direction {
-    Up = 'up',
-    Down = 'down',
-    Left = 'left',
-    Right = 'right',
-}
+import { Direction } from ".";
 
 interface PosData {
     x: number,
@@ -79,6 +74,5 @@ export default class Pos {
 }
 
 export {
-    PosData,
-    Direction,
+    PosData
 }

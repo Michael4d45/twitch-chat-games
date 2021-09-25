@@ -1,6 +1,6 @@
 import * as World from "./world";
 import { Canvas } from "../../game_base/client/types"
-import Pos from "../../game_base/game/Pos";
+import Pos from "../../game_base/util/Pos";
 import { Piece } from "./world/types"
 
 let canvas: Canvas;

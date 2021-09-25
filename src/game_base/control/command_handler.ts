@@ -2,7 +2,10 @@ import { io, Socket } from "socket.io-client";
 import { Room, CommandData } from "../server/types"
 import { CommandHandler, HandleCommandData } from "./types"
 
-const socket: Socket = io("http://localhost:3000");
+if (!(process.env.URL))
+    throw("You must set the url in the .env file");
+
+const socket: Socket = io(process.env.URL);
 
 socket.emit("identify", Room.Control);
 

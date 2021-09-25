@@ -1,4 +1,5 @@
-import Pos, { PosData, Direction } from "../../../game_base/game/Pos";
+import { Direction } from "../../../game_base/util";
+import Pos, { PosData } from "../../../game_base/util/Pos";
 
 export interface ShotData {
     pos: PosData
