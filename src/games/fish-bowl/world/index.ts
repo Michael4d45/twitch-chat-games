@@ -3,14 +3,14 @@ import { Command } from "../types";
 import Fish, { FishData } from "./fish";
 
 interface WorldData {
-    fishes: Array<FishData>
-    frame: number
+    fishes: Array<FishData>,
+    frame: number,
 }
 
 let fishes: Array<Fish> = [];
-let frame = 0;
 
 let max_fishes = 10;
+let frame = 0;
 
 for (let i = 0; i < max_fishes; i++) {
     fishes.push(new Fish(i))
@@ -33,7 +33,7 @@ function animate(timestamp: number) {
         if(fish.is_dead()) {
             fish.renew()
         } else {
-            fish.move()
+            fish.move(fishes)
         }
     }
 }
@@ -55,7 +55,7 @@ function fromJSON(data: WorldData) {
         fishes.push(Fish.fromJSON(fish));
     });
     console.log(data.frame - frame)
-    frame = data.frame;
+    frame = data.frame
 }
 
 export {

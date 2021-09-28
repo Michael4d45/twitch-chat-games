@@ -61,6 +61,24 @@ export default class Pos {
         return true;
     }
 
+    move_toward(pos: Pos, speed: number) {
+        const v = {
+            x: pos.x - this.x,
+            y: pos.y - this.y
+        }
+        let len = Math.sqrt(
+            Math.pow(v.x, 2) + 
+            Math.pow(v.y, 2)
+        );
+        this.x += (v.x / len) * speed;
+        this.y += (v.y / len) * speed;
+        return this;
+    }
+
+    square_distance_to(to_pos: Pos) {
+        return Math.pow((this.y - to_pos.y), 2) + Math.pow((this.x - to_pos.x), 2);
+    }
+
     toJSON(): PosData {
         return {
             x: this.x,

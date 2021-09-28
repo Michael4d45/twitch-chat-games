@@ -3,7 +3,7 @@ import { Canvas } from "../../game_base/client/types"
 import Fish from "./world/fish";
 
 let canvas: Canvas;
-const scale = 10;
+const scale = 3;
 
 function set_canvas(new_canvas: Canvas) {
     canvas = new_canvas;
@@ -18,6 +18,7 @@ function draw_fishes() {
 
 function draw_fish(fish: Fish) {
     canvas.draw_square(fish.pos, fish.color)
+    //canvas.draw_square(fish.to_pos, fish.color, true)
 }
 
 export {
